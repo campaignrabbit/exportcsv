@@ -1,0 +1,18 @@
+{
+  "name": "campaignrabbit/exportcsv",
+  "description": "Simple export csv library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alagesan"
+    }
+  ],
+  "require": {
+    "php"                 : ">=5.6.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "CampaignRabbit\\ExportCsv\\" : "src/"
+    }
+  }
+}

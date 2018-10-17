@@ -3,8 +3,15 @@ namespace CampaignRabbit\ExportCsv;
 class ExportCsv {
 
     protected $export_path = '';
-    protected $header = array();
+    protected $headers = array();
     protected $resulting_csv_values = array();
+
+    public function __construct($export_file_path = '', $header = array())
+    {
+        $this->setCsvPath($export_file_path);
+        $this->setHeader($header);
+    }
+
     /**
      * @param $path - export csv path
      */
@@ -29,7 +36,7 @@ class ExportCsv {
             throw new \Exception('Array value only accepted');
         }
 
-        if(empty($this->header)){
+        if(empty($this->headers)){
             throw new \Exception('Please set header first');
         }
 
@@ -38,24 +45,28 @@ class ExportCsv {
         }
 
         foreach ($csv_values as $csv_value){
+
             $single_csv_record = array();
-            foreach ($this->header as $header_key => $header_value){
+
+            foreach ($this->headers as $header_key){
                 if(isset($csv_value[$header_key])){
-                    if(is_array($header_value)){
-                        $header_value = implode(',',$header_value);
+                    if(is_array($csv_value[$header_key])){
+                        $csv_value[$header_key] = implode(',',$csv_value[$header_key]);
                     }
-                    array_push($single_csv_record,$header_value);
+                    array_push($single_csv_record,$csv_value[$header_key]);
                 }
             }
+
             $this->resulting_csv_values[] = $single_csv_record;
         }
     }
 
     /**
+     * Export Csv file
      * @throws \Exception
      */
     public function writeCsv(){
-        if(empty($this->header)){
+        if(empty($this->headers)){
             throw new \Exception('Please set header first');
         }
 
@@ -69,7 +80,7 @@ class ExportCsv {
 
         if(!file_exists($this->export_path) ){
             $file = fopen($this->export_path, "a");
-            fputcsv($file, $this->header);
+            fputcsv($file, $this->headers);
         }else{
             $file = fopen($this->export_path, "a");
         }
